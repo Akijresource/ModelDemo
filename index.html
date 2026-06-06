@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>InfraCo · Borrow-a-Talent</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Sora:wght@400;500;600;700&display=swap');
+:root{
+  --bg:#07111f;--panel:#0f1e33;--panel2:#162540;--line:#1e3050;--line2:#2e4870;
+  --txt:#edf2fc;--mut:#a8bdd8;--mut2:#607a9a;
+  --blu:#3b9eff;--teal:#2ddbb4;--lime:#a8f040;--amb:#f5c842;--mag:#f04b8e;--vio:#a07af5;--coral:#f07850;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Sora',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
+  background-image:linear-gradient(var(--line2) 1px,transparent 1px),linear-gradient(90deg,var(--line2) 1px,transparent 1px);
+  background-size:44px 44px}
+.wrap{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 24px 100px}
+.mono{font-family:'Chakra Petch',monospace}
+
+/* HERO */
+.hero{padding:64px 0 36px}
+.crumb{font-family:'Chakra Petch',monospace;font-size:11px;letter-spacing:.2em;color:var(--mut2);text-transform:uppercase}
+.crumb b{color:var(--lime)}
+.htag{display:inline-block;font-family:'Chakra Petch',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--blu);border:1px solid var(--line2);border-radius:100px;padding:5px 15px;background:rgba(59,158,255,.07);margin-top:14px}
+h1{font-family:'Chakra Petch',monospace;font-weight:700;font-size:clamp(28px,5vw,56px);line-height:1.05;margin-top:16px}
+h1 .a{color:var(--blu)} h1 .b{color:var(--lime)}
+.sub{max-width:640px;color:var(--mut);font-size:clamp(13px,1.4vw,15.5px);margin-top:13px;line-height:1.65}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.dp{font-family:'Chakra Petch',monospace;font-size:10.5px;letter-spacing:.04em;padding:4px 12px;border-radius:7px;border:1px solid var(--line2);background:#091525;color:var(--mut)}
+
+/* STATS */
+.band{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:36px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 18px}
+.stat .n{font-family:'Chakra Petch',monospace;font-size:36px;font-weight:700;line-height:1}
+.stat:nth-child(1) .n{color:var(--blu)}
+.stat:nth-child(2) .n{color:var(--teal)}
+.stat:nth-child(3) .n{color:var(--amb)}
+.stat:nth-child(4) .n{color:var(--mag)}
+.stat .l{color:var(--mut);font-size:12px;margin-top:8px;line-height:1.4}
+
+/* SECTIONS */
+.sec{margin-top:64px}
+.sec-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:5px}
+.sec-h .num{font-family:'Chakra Petch',monospace;color:var(--mut2);font-size:13px}
+.sec-h h2{font-family:'Chakra Petch',monospace;font-size:clamp(19px,2.6vw,26px);font-weight:600}
+.sec-d{color:var(--mut);font-size:13.5px;margin-bottom:20px;max-width:700px;line-height:1.6}
+
+/* MODEL */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.fstep{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;position:relative}
+.fstep .k{font-family:'Chakra Petch',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.fstep:nth-child(1) .k{color:var(--blu)}
+.fstep:nth-child(2) .k{color:var(--teal)}
+.fstep:nth-child(3) .k{color:var(--amb)}
+.fstep:nth-child(4) .k{color:var(--lime)}
+.fstep p{color:var(--mut);font-size:12.5px;margin-top:7px;line-height:1.5}
+.fstep .ar{position:absolute;right:-9px;top:50%;transform:translateY(-50%);color:var(--line2);font-size:16px;z-index:2}
+
+/* POOL */
+.pool{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+.pcard h3{font-family:'Chakra Petch',monospace;font-size:12px;letter-spacing:.06em;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;color:var(--mut)}
+.pcard h3 .cnt{font-size:22px;font-weight:700;color:var(--blu)}
+.pcard.cr h3 .cnt{color:var(--teal)}
+.bar{margin-bottom:11px}
+.bar .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;color:var(--mut)}
+.bar .top .v{font-family:'Chakra Petch',monospace;color:var(--txt);font-weight:600}
+.bar .track{height:7px;background:#060f1c;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.bar .fill{height:100%;border-radius:4px;background:var(--blu);width:0;animation:grow .9s cubic-bezier(.2,.8,.2,1) forwards}
+.pcard.cr .bar .fill{background:var(--teal)}
+@keyframes grow{to{width:var(--w)}}
+
+/* DEPT GRID */
+.dept-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:18px}
+.dcard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px}
+.dcard .di{font-size:20px;margin-bottom:8px}
+.dcard .dn{font-family:'Chakra Petch',monospace;font-size:12.5px;font-weight:600;margin-bottom:4px}
+.dcard .ds{font-size:11.5px;color:var(--mut);line-height:1.4}
+.dcard .dc{font-family:'Chakra Petch',monospace;font-size:11px;margin-top:10px}
+
+/* PROJECT BANNER */
+.proj{margin-top:22px;border:1px solid var(--line2);border-radius:18px;overflow:hidden;background:linear-gradient(125deg,var(--panel2),var(--panel))}
+.proj .pbar{display:flex;flex-wrap:wrap;gap:11px;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--line)}
+.proj .pt{font-family:'Chakra Petch',monospace;font-size:clamp(15px,2.2vw,22px);font-weight:700}
+.proj .pt .hi{color:var(--lime)}
+.mchip{font-family:'Chakra Petch',monospace;font-size:10.5px;letter-spacing:.04em;padding:5px 11px;border-radius:7px;border:1px solid var(--line2);background:#07111f;color:var(--mut)}
+.mchip.hot{color:var(--amb);border-color:rgba(245,200,66,.35);background:rgba(245,200,66,.07)}
+.mchip.info{color:var(--blu);border-color:rgba(59,158,255,.35);background:rgba(59,158,255,.07)}
+
+/* DISCIPLINE CARDS */
+.disc{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:20px}
+.d{background:var(--bg);border:1px solid var(--line);border-radius:13px;padding:16px;position:relative;border-left:3px solid transparent}
+.d.t-blu{border-left-color:var(--blu)}
+.d.t-teal{border-left-color:var(--teal)}
+.d.t-amb{border-left-color:var(--amb)}
+.d.t-mag{border-left-color:var(--mag)}
+.d.t-vio{border-left-color:var(--vio)}
+.d.t-lime{border-left-color:var(--lime)}
+.d.t-coral{border-left-color:var(--coral)}
+.dh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:2px}
+.dn{font-family:'Chakra Petch',monospace;font-size:14.5px;font-weight:600}
+.role-t{font-size:12px;color:var(--mut);margin-bottom:11px;line-height:1.4}
+.fit{display:flex;gap:3px;align-items:center;flex-shrink:0}
+.fit i{width:8px;height:8px;border-radius:2px;background:var(--line2);display:block}
+.fit i.on{background:var(--lime)}.fit.mid i.on{background:var(--blu)}.fit.low i.on{background:var(--amb)}
+.ppl{display:flex;flex-wrap:wrap;gap:6px}
+.av{display:flex;align-items:center;gap:6px;background:#0c1a2e;border:1px solid var(--line);border-radius:100px;padding:3px 11px 3px 3px}
+.av .ic{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Chakra Petch',monospace;font-size:9px;font-weight:700;color:#07111f}
+.av .nm{font-size:11.5px;color:var(--txt)}
+.av .nm small{color:var(--mut2);font-size:10px}
+.flag{margin-top:10px;font-size:11px;font-family:'Chakra Petch',monospace;letter-spacing:.02em;border-radius:7px;padding:7px 10px;display:flex;gap:7px;align-items:flex-start;line-height:1.4}
+.flag.ok{background:rgba(45,219,180,.07);border:1px solid rgba(45,219,180,.25);color:var(--teal)}
+.flag.gap{background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.28);color:var(--amb)}
+.flag b{color:var(--txt);font-weight:600}
+
+/* SKILL PROFILE */
+.profile-wrap{display:grid;grid-template-columns:260px 1fr;gap:14px;margin-top:18px;align-items:start}
+.plist{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.plist h3{font-family:'Chakra Petch',monospace;font-size:11px;letter-spacing:.1em;color:var(--mut2);text-transform:uppercase;margin-bottom:12px}
+.mtab{font-family:'Chakra Petch',monospace;font-size:12px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);background:#0b1827;color:var(--mut);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mtab .mic{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#07111f;flex-shrink:0}
+.mtab:hover{border-color:var(--line2);color:var(--txt)}
+.mtab.active{background:rgba(59,158,255,.12);border-color:rgba(59,158,255,.5);color:var(--txt)}
+.pdetail{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.pd-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.pd-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Chakra Petch',monospace;font-size:14px;font-weight:700;color:#07111f;flex-shrink:0}
+.pd-name{font-family:'Chakra Petch',monospace;font-size:17px;font-weight:700}
+.pd-role{font-size:12px;color:var(--mut);margin-top:2px}
+.pd-exp{font-family:'Chakra Petch',monospace;font-size:11px;color:var(--mut2);margin-top:4px}
+.cat-label{font-family:'Chakra Petch',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut2);margin:14px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.sb-row{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:8px}
+.sb-lbl{color:var(--mut);min-width:180px;flex-shrink:0;line-height:1.3}
+.sb-track{flex:1;height:6px;background:#060f1c;border-radius:3px;border:1px solid var(--line);overflow:hidden}
+.sb-fill{height:100%;border-radius:3px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
+.sb-val{font-family:'Chakra Petch',monospace;font-size:11px;color:var(--txt);min-width:16px;text-align:right}
+
+/* MORE PROJECTS */
+.more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:18px}
+.mproj{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:20px}
+.mpt{font-family:'Chakra Petch',monospace;font-size:13.5px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.mps{font-size:12px;color:var(--mut);margin-bottom:13px;line-height:1.5}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px}
+.mtag{font-family:'Chakra Petch',monospace;font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid var(--line2);color:var(--mut2)}
+.disc-mini{display:flex;flex-direction:column;gap:6px}
+.dm-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.dm-lbl{color:var(--mut)}
+.dmb{font-family:'Chakra Petch',monospace;font-size:10px;padding:2px 8px;border-radius:5px}
+.lead{background:rgba(59,158,255,.12);color:var(--blu);border:1px solid rgba(59,158,255,.3)}
+.req{background:rgba(45,219,180,.1);color:var(--teal);border:1px solid rgba(45,219,180,.25)}
+.sup{background:rgba(160,122,245,.1);color:var(--vio);border:1px solid rgba(160,122,245,.25)}
+.none{background:rgba(96,122,154,.08);color:var(--mut2);border:1px solid var(--line)}
+
+/* AVAILABILITY */
+.avail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.av-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px}
+.av-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.av-ic{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Chakra Petch',monospace;font-size:11px;font-weight:700;color:#07111f;flex-shrink:0}
+.av-name{font-family:'Chakra Petch',monospace;font-size:13px;font-weight:600}
+.av-role{font-size:11.5px;color:var(--mut);margin-top:2px}
+.av-pct{font-family:'Chakra Petch',monospace;font-size:26px;font-weight:700;line-height:1}
+.av-pct-l{font-size:11px;color:var(--mut);margin-bottom:7px}
+.av-track{height:5px;background:#060f1c;border-radius:3px;overflow:hidden;border:1px solid var(--line);margin-bottom:9px}
+.av-fill{height:100%;border-radius:3px}
+.av-proj{font-size:11px;color:var(--mut2);line-height:1.4}
+.av-badge{display:inline-block;font-family:'Chakra Petch',monospace;font-size:9.5px;padding:3px 9px;border-radius:5px;margin-top:8px}
+.bs-free{background:rgba(45,219,180,.1);color:var(--teal);border:1px solid rgba(45,219,180,.28)}
+.bs-part{background:rgba(245,200,66,.1);color:var(--amb);border:1px solid rgba(245,200,66,.28)}
+.bs-busy{background:rgba(240,75,142,.1);color:var(--mag);border:1px solid rgba(240,75,142,.28)}
+
+/* SUPPORT + SQUAD */
+.supp{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}
+.sp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.sp .sk{font-family:'Chakra Petch',monospace;font-size:12px;font-weight:600;margin-bottom:4px}
+.sp .sv{font-size:11.5px;color:var(--mut);line-height:1.4}
+.sp .who{font-family:'Chakra Petch',monospace;font-size:11px;margin-top:8px}
+.sp:nth-child(1) .who{color:var(--blu)}
+.sp:nth-child(2) .who{color:var(--teal)}
+.sp:nth-child(3) .who{color:var(--vio)}
+.sp:nth-child(4) .who{color:var(--lime)}
+.sp:nth-child(5) .who{color:var(--amb)}
+.squad{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.sq{flex:1 1 110px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 14px}
+.sq .q{font-family:'Chakra Petch',monospace;font-size:24px;font-weight:700}
+.sq:nth-child(1) .q{color:var(--blu)}.sq:nth-child(2) .q{color:var(--teal)}
+.sq:nth-child(3) .q{color:var(--lime)}.sq:nth-child(4) .q{color:var(--vio)}.sq:nth-child(5) .q{color:var(--amb)}
+.sq .ql{font-size:11px;color:var(--mut);margin-top:2px}
+.note{margin-top:20px;border:1px solid var(--line);border-left:3px solid var(--blu);border-radius:11px;padding:14px 17px;background:rgba(59,158,255,.04);font-size:13px;color:var(--mut);line-height:1.6}
+.note b{color:var(--blu);font-family:'Chakra Petch',monospace}
+
+footer{margin-top:60px;border-top:1px solid var(--line);padding-top:20px;color:var(--mut2);font-size:11px;font-family:'Chakra Petch',monospace;letter-spacing:.05em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media(max-width:980px){
+  .flow,.dept-grid{grid-template-columns:repeat(2,1fr)}.fstep .ar{display:none}
+  .pool{grid-template-columns:1fr}.more-grid{grid-template-columns:1fr 1fr}
+  .profile-wrap{grid-template-columns:1fr}.supp{grid-template-columns:repeat(2,1fr)}
+  .avail-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:620px){
+  .wrap{padding:0 14px 60px}.hero{padding:40px 0 22px}
+  .band{grid-template-columns:repeat(2,1fr);gap:9px}
+  .disc,.more-grid,.dept-grid{grid-template-columns:1fr}
+  .avail-grid,.supp{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.bar .fill,.sb-fill,.av-fill{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="crumb">INFRACO GROUP <b>×</b> RESOURCE PLANNING &nbsp;//&nbsp; BORROW-A-TALENT MODEL</div>
+  <span class="htag">Civil engineering · project-wise resourcing</span>
+  <h1>Don't staff a project.<br><span class="a">Borrow</span> the discipline — <span class="b">when you need it</span>.</h1>
+  <p class="sub">12 specialists sit across civil, structural, geotechnical, MEP, BIM, project controls, HSE and QS. For every project we pull only the exact disciplines it needs, deliver, then hand them back.</p>
+  <div class="pills">
+    <span class="dp">Civil &amp; Structural</span><span class="dp">Geotechnical</span>
+    <span class="dp">MEP Services</span><span class="dp">BIM / Digital</span>
+    <span class="dp">Project Controls</span><span class="dp">HSE &amp; Safety</span>
+    <span class="dp">Quantity Surveying</span><span class="dp">Environmental</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="band">
+  <div class="stat"><div class="n">12</div><div class="l">Borrowable specialists in the firm</div></div>
+  <div class="stat"><div class="n">8</div><div class="l">Disciplines available in-house</div></div>
+  <div class="stat"><div class="n">4</div><div class="l">Active projects in the pipeline</div></div>
+  <div class="stat"><div class="n">2</div><div class="l">Disciplines sub-consulted externally</div></div>
+</section>
+
+<!-- MODEL -->
+<section class="sec">
+  <div class="sec-h"><span class="num">01</span><h2>How the borrow model works</h2></div>
+  <p class="sec-d">A repeatable loop for every project or project phase — not a permanent reshuffle of the firm.</p>
+  <div class="flow">
+    <div class="fstep"><div class="k">1 · Scope</div><p>List every discipline this project needs — civil, MEP, BIM, HSE, geotech, QS.</p><span class="ar">→</span></div>
+    <div class="fstep"><div class="k">2 · Match</div><p>Pull the right people from the pool by skill level and current availability.</p><span class="ar">→</span></div>
+    <div class="fstep"><div class="k">3 · Deliver</div><p>Borrowed members work alongside the project lead until their phase is complete.</p><span class="ar">→</span></div>
+    <div class="fstep"><div class="k">4 · Return</div><p>Released back to home department — ready for the next assignment cycle.</p></div>
+  </div>
+</section>
+
+<!-- DEPARTMENTS -->
+<section class="sec">
+  <div class="sec-h"><span class="num">02</span><h2>Departments in the firm</h2></div>
+  <p class="sec-d">Every department is a borrowable pool. Projects draw from whichever departments their scope demands.</p>
+  <div class="dept-grid" id="dept-grid"></div>
+</section>
+
+<!-- POOL -->
+<section class="sec">
+  <div class="sec-h"><span class="num">03</span><h2>The pool you draw from</h2></div>
+  <p class="sec-d">12 people across two clusters. Numbers show headcount per discipline available for borrowing.</p>
+  <div class="pool">
+    <div class="pcard">
+      <h3>TECHNICAL DELIVERY <span class="cnt">8</span></h3>
+      <div class="bar"><div class="top"><span>Civil &amp; Structural Engineering</span><span class="v">3</span></div><div class="track"><div class="fill" style="--w:100%"></div></div></div>
+      <div class="bar"><div class="top"><span>Geotechnical &amp; Foundation</span><span class="v">1</span></div><div class="track"><div class="fill" style="--w:33%"></div></div></div>
+      <div class="bar"><div class="top"><span>MEP (Mech / Elec / Plumbing)</span><span class="v">2</span></div><div class="track"><div class="fill" style="--w:67%"></div></div></div>
+      <div class="bar"><div class="top"><span>BIM / Digital Delivery</span><span class="v">2</span></div><div class="track"><div class="fill" style="--w:67%"></div></div></div>
+      <div class="bar"><div class="top"><span>Environmental &amp; EIA</span><span class="v">1</span></div><div class="track"><div class="fill" style="--w:33%"></div></div></div>
+      <div class="bar"><div class="top"><span>Traffic Engineering</span><span class="v">1</span></div><div class="track"><div class="fill" style="--w:33%"></div></div></div>
+    </div>
+    <div class="pcard cr">
+      <h3>PROJECT CONTROLS &amp; SITE <span class="cnt">4</span></h3>
+      <div class="bar"><div class="top"><span>Quantity Surveying / BOQ</span><span class="v">2</span></div><div class="track"><div class="fill" style="--w:100%"></div></div></div>
+      <div class="bar"><div class="top"><span>Planning &amp; Programme</span><span class="v">2</span></div><div class="track"><div class="fill" style="--w:100%"></div></div></div>
+      <div class="bar"><div class="top"><span>Contract Administration</span><span class="v">1</span></div><div class="track"><div class="fill" style="--w:50%"></div></div></div>
+      <div class="bar"><div class="top"><span>HSE &amp; Site Safety</span><span class="v">2</span></div><div class="track"><div class="fill" style="--w:100%"></div></div></div>
+      <div class="bar"><div class="top"><span>Construction Supervision</span><span class="v">3</span></div><div class="track"><div class="fill" style="--w:100%"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILL PROFILES -->
+<section class="sec">
+  <div class="sec-h"><span class="num">04</span><h2>Individual skill profiles</h2></div>
+  <p class="sec-d">Select a team member to see their skill depth across all 31 assessed competencies. Scale: 0=none · 1=awareness · 2=working · 3=proficient · 4=expert · D=delivered.</p>
+  <div class="profile-wrap">
+    <div class="plist">
+      <h3>Team members</h3>
+      <div id="mtabs"></div>
+    </div>
+    <div class="pdetail">
+      <div class="pd-head">
+        <div class="pd-av" id="pd-av"></div>
+        <div><div class="pd-name" id="pd-name"></div><div class="pd-role" id="pd-role"></div><div class="pd-exp" id="pd-exp"></div></div>
+      </div>
+      <div id="pd-skills"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN PROJECT -->
+<section class="sec">
+  <div class="sec-h"><span class="num">05</span><h2>Live demo — who to borrow</h2></div>
+  <p class="sec-d">Assignment sheet for the lead active project. Dots show in-house strength; amber flags show where to sub-consult.</p>
+  <div class="proj">
+    <div class="pbar">
+      <div class="pt">Greenfield Industrial Park — <span class="hi">Phase 1 Civil Works</span></div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <span class="mchip info">LAND DEVELOPMENT · ROADS · DRAINAGE</span>
+        <span class="mchip">DESIGN-TO-BUILD</span>
+        <span class="mchip hot">⏱ 18-MONTH PROGRAMME</span>
+      </div>
+    </div>
+    <div class="disc">
+      <div class="d t-blu">
+        <div class="dh"><div class="dn">Civil &amp; Structural</div><div class="fit"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+        <div class="role-t">Earthworks design, internal road layout, retaining structures, drainage network</div>
+        <div class="ppl">
+          <span class="av"><span class="ic" style="background:var(--blu)">RA</span><span class="nm">Rashid Al-Amin <small>Lead</small></span></span>
+          <span class="av"><span class="ic" style="background:var(--teal)">NK</span><span class="nm">Nadia Khan</span></span>
+        </div>
+        <div class="flag ok">✓ <span><b>Fully in-house.</b> 3 civil engineers — 2 on design, 1 on supervision.</span></div>
+      </div>
+      <div class="d t-teal">
+        <div class="dh"><div class="dn">BIM / Digital Delivery</div><div class="fit mid"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+        <div class="role-t">3D coordination model, clash detection, IFC issue, as-built records</div>
+        <div class="ppl">
+          <span class="av"><span class="ic" style="background:var(--teal)">FH</span><span class="nm">Farhan Hossain <small>BIM Lead</small></span></span>
+          <span class="av"><span class="ic" style="background:var(--vio)">SZ</span><span class="nm">Sayeed Zaman</span></span>
+        </div>
+        <div class="flag ok">✓ <span><b>Strong bench.</b> Farhan leads coordination; Sayeed manages model and drawing issue.</span></div>
+      </div>
+      <div class="d t-amb">
+        <div class="dh"><div class="dn">MEP Services</div><div class="fit low"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div></div>
+        <div class="role-t">Industrial power reticulation, water supply hook-up, HVAC for utility blocks</div>
+        <div class="ppl">
+          <span class="av"><span class="ic" style="background:var(--amb)">MR</span><span class="nm">Mariam Rahman <small>coordination</small></span></span>
+        </div>
+        <div class="flag gap">⚠ <span><b>Thin in-house.</b> Mariam handles coordination only — sub-consult specialist MEP firm for detailed design.</span></div>
+      </div>
+      <div class="d t-mag">
+        <div class="dh"><div class="dn">Geotechnical</div><div class="fit low"><i class="on"></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="role-t">Site investigation, bearing capacity assessment, pile design input, settlement analysis</div>
+        <div class="ppl">
+          <span class="av"><span class="ic" style="background:var(--blu)">RA</span><span class="nm">Rashid Al-Amin <small>review</small></span></span>
+        </div>
+        <div class="flag gap">⚠ <span><b>Biggest gap.</b> Engage geotech sub-consultant for SI and foundation report; Rashid reviews outputs.</span></div>
+      </div>
+      <div class="d t-vio">
+        <div class="dh"><div class="dn">Quantity Surveying</div><div class="fit mid"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+        <div class="role-t">Bill of quantities, tender pricing, variation tracking, monthly valuation</div>
+        <div class="ppl">
+          <span class="av"><span class="ic" style="background:var(--vio)">TI</span><span class="nm">Tanvira Islam <small>QS Lead</small></span></span>
+          <span class="av"><span class="ic" style="background:var(--lime)">AR</span><span class="nm">Adnan Reza</span></span>
+        </div>
+        <div class="flag ok">✓ <span><b>Well covered.</b> Tanvira leads BOQ; Adnan manages programme and monthly reporting.</span></div>
+      </div>
+      <div class="d t-lime">
+        <div class="dh"><div class="dn">HSE &amp; Site Safety</div><div class="fit"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+        <div class="role-t">Construction phase safety plan, induction, permit-to-work, incident reporting</div>
+        <div class="ppl">
+          <span class="av"><span class="ic" style="background:var(--lime)">KM</span><span class="nm">Kamrul Miah <small>HSE Officer</small></span></span>
+        </div>
+        <div class="flag ok">✓ <span><b>Expert level.</b> Kamrul covers full HSE scope for Phase 1 independently.</span></div>
+      </div>
+      <div class="d t-coral">
+        <div class="dh"><div class="dn">Environmental</div><div class="fit mid"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+        <div class="role-t">EIA conditions compliance, run-off management plan, ecological monitoring</div>
+        <div class="ppl">
+          <span class="av"><span class="ic" style="background:var(--coral)">LA</span><span class="nm">Layla Ahmed</span></span>
+        </div>
+        <div class="flag ok">✓ <span><b>Competent coverage.</b> Layla handles EIA compliance and monitoring reports throughout construction.</span></div>
+      </div>
+      <div class="d t-teal">
+        <div class="dh"><div class="dn">Surveying &amp; Setting Out</div><div class="fit mid"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+        <div class="role-t">Topographic survey, setting out for earthworks and roads, as-built survey</div>
+        <div class="ppl">
+          <span class="av"><span class="ic" style="background:var(--teal)">NK</span><span class="nm">Nadia Khan <small>survey lead</small></span></span>
+        </div>
+        <div class="flag ok">✓ <span><b>In-house.</b> Nadia leads setting-out; total station and GNSS equipment available.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="supp">
+    <div class="sp"><div class="sk">Programme control</div><div class="sv">Baseline schedule, EV tracking, critical path updates</div><div class="who">Adnan Reza</div></div>
+    <div class="sp"><div class="sk">Stakeholder reporting</div><div class="sv">Monthly progress packs, KPI dashboard, client minutes</div><div class="who">Tanvira Islam</div></div>
+    <div class="sp"><div class="sk">Procurement</div><div class="sv">Subcontractor packages, ITT preparation, evaluation</div><div class="who">Nadia Khan</div></div>
+    <div class="sp"><div class="sk">EIA compliance</div><div class="sv">Condition tracking, run-off monitoring, ecology reports</div><div class="who">Layla Ahmed</div></div>
+    <div class="sp"><div class="sk">Handover / O&amp;M</div><div class="sv">As-built BIM, O&amp;M manuals, defects schedule</div><div class="who">Farhan Hossain</div></div>
+  </div>
+  <div class="squad">
+    <div class="sq"><div class="q">2</div><div class="ql">Core (project lead + PM)</div></div>
+    <div class="sq"><div class="q">+5</div><div class="ql">Borrowed · technical delivery</div></div>
+    <div class="sq"><div class="q">+3</div><div class="ql">Borrowed · controls &amp; HSE</div></div>
+    <div class="sq"><div class="q">+2</div><div class="ql">Sub-consulted externally</div></div>
+    <div class="sq"><div class="q">~12</div><div class="ql">Effective project squad</div></div>
+  </div>
+  <div class="note"><b>FAST-TRACK TAKEAWAY.</b> Civil design, BIM coordination, QS, HSE, environmental and surveying are fully covered in-house. The only real gaps — detailed MEP design and geotechnical investigation — are solved with targeted sub-consultancy in days. Borrow 8 internal specialists, sub-consult 2, and Phase 1 is fully resourced without a single new hire.</div>
+</section>
+
+<!-- MORE PROJECTS -->
+<section class="sec">
+  <div class="sec-h"><span class="num">06</span><h2>More active projects</h2></div>
+  <p class="sec-d">Every project draws only the disciplines it needs. Demand mapped across the current pipeline.</p>
+  <div class="more-grid">
+    <div class="mproj">
+      <div class="mpt">National Highway Upgrade — Km 42–67</div>
+      <div class="mps">Pavement rehabilitation, bridge widening, drainage improvement across 25 km of national corridor.</div>
+      <div class="tag-row"><span class="mtag">ROAD &amp; HIGHWAY</span><span class="mtag">24 MONTHS</span><span class="mtag">GOVT / RHD</span></div>
+      <div class="disc-mini">
+        <div class="dm-row"><span class="dm-lbl">Civil &amp; Structural</span><span class="dmb lead">Lead</span></div>
+        <div class="dm-row"><span class="dm-lbl">Bridge Design</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">Geotechnical</span><span class="dmb req">Sub-consult</span></div>
+        <div class="dm-row"><span class="dm-lbl">HSE</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">QS / BOQ</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">MEP</span><span class="dmb none">Not needed</span></div>
+        <div class="dm-row"><span class="dm-lbl">Traffic Engineering</span><span class="dmb sup">Support</span></div>
+      </div>
+    </div>
+    <div class="mproj">
+      <div class="mpt">Riverside Mixed-Use Development</div>
+      <div class="mps">12-storey RC frame + retail podium + 2-level basement. Full MEP coordination and BIM Level 2.</div>
+      <div class="tag-row"><span class="mtag">BUILDING STRUCTURE</span><span class="mtag">36 MONTHS</span><span class="mtag">PRIVATE CLIENT</span></div>
+      <div class="disc-mini">
+        <div class="dm-row"><span class="dm-lbl">Civil &amp; Structural</span><span class="dmb lead">Lead</span></div>
+        <div class="dm-row"><span class="dm-lbl">MEP Services</span><span class="dmb lead">Lead</span></div>
+        <div class="dm-row"><span class="dm-lbl">BIM / Digital</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">QS / BOQ</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">Geotechnical</span><span class="dmb req">Sub-consult</span></div>
+        <div class="dm-row"><span class="dm-lbl">HSE</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">Architecture</span><span class="dmb sup">Support</span></div>
+      </div>
+    </div>
+    <div class="mproj">
+      <div class="mpt">Water Treatment Plant — Phase 2 Expansion</div>
+      <div class="mps">Sedimentation tank addition, new pump station, electrical upgrade for 40 MLD treatment capacity.</div>
+      <div class="tag-row"><span class="mtag">UTILITIES</span><span class="mtag">14 MONTHS</span><span class="mtag">GOVT / WASA</span></div>
+      <div class="disc-mini">
+        <div class="dm-row"><span class="dm-lbl">Civil &amp; Structural</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">MEP Services</span><span class="dmb lead">Lead</span></div>
+        <div class="dm-row"><span class="dm-lbl">Geotechnical</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">Environmental / EIA</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">HSE</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">QS / BOQ</span><span class="dmb req">Required</span></div>
+        <div class="dm-row"><span class="dm-lbl">BIM</span><span class="dmb sup">Support</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AVAILABILITY -->
+<section class="sec">
+  <div class="sec-h"><span class="num">07</span><h2>Team availability — current load</h2></div>
+  <p class="sec-d">Who has capacity right now. Remaining % drives the next borrowing decision.</p>
+  <div class="avail-grid" id="avail-grid"></div>
+</section>
+
+<footer>
+  <span>INFRACO GROUP · BORROW-A-TALENT MODEL</span>
+  <span>PIPELINE: 4 ACTIVE PROJECTS · 12 SPECIALISTS · 8 DEPARTMENTS</span>
+</footer>
+</div>
+
+<script>
+const DEPTS=[
+  {icon:"🏗",name:"Civil & Structural",desc:"Roads, bridges, RC/steel frames, drainage, earthworks",count:"3 engineers",col:"var(--blu)"},
+  {icon:"🪨",name:"Geotechnical",desc:"Site investigation, soil testing, foundation & pile design",count:"1 specialist",col:"var(--coral)"},
+  {icon:"⚡",name:"MEP Services",desc:"Mechanical, electrical, plumbing, HVAC, fire fighting",count:"2 engineers",col:"var(--vio)"},
+  {icon:"📐",name:"BIM / Digital",desc:"Revit modelling, clash detection, AutoCAD, GIS, as-builts",count:"2 specialists",col:"var(--teal)"},
+  {icon:"📊",name:"Project Controls",desc:"Cost estimation, BOQ, contract admin, programme, risk",count:"2 specialists",col:"var(--amb)"},
+  {icon:"🦺",name:"HSE",desc:"Safety planning, NEBOSH, CDM, site inductions, audits",count:"1 officer",col:"var(--lime)"},
+  {icon:"🌿",name:"Environmental",desc:"EIA, ecological surveys, compliance, sustainability",count:"1 specialist",col:"var(--mag)"},
+  {icon:"🗺",name:"Surveying",desc:"Topographic surveys, setting out, GNSS, geospatial",count:"Shared",col:"var(--teal)"},
+];
+
+const MEMBERS=[
+  {name:"Rashid Al-Amin",init:"RA",role:"Senior Civil Engineer",exp:"8 yrs · Permanent",col:"var(--blu)",pct:75,status:"part",proj:"Greenfield Ph.1 + Highway Upgrade",
+   cats:[
+     {lbl:"Civil & Structural",col:"var(--blu)",skills:[["Structural Analysis",4],["RC Design",3],["Steel Design",2],["Foundation Design",3],["Road & Pavement",4],["Bridge Design",3],["Hydraulics",3]]},
+     {lbl:"Geotechnical",col:"var(--coral)",skills:[["Geotechnical / Soil",2]]},
+     {lbl:"Digital",col:"var(--teal)",skills:[["BIM / Revit",2],["AutoCAD / Civil 3D",4]]},
+     {lbl:"Project Controls",col:"var(--amb)",skills:[["Cost & BOQ",3],["Programme",3]]},
+     {lbl:"Site & Field",col:"var(--lime)",skills:[["Construction Supervision",4],["HSE Management",3],["QA / QC",3]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Report Writing",4],["Stakeholder Mgmt",3],["Project Management",4]]},
+   ]},
+  {name:"Nadia Khan",init:"NK",role:"Civil Engineer · Drainage",exp:"4 yrs · Permanent",col:"var(--teal)",pct:60,status:"part",proj:"Greenfield Ph.1 + Riverside Dev",
+   cats:[
+     {lbl:"Civil & Structural",col:"var(--blu)",skills:[["Structural Analysis",2],["RC Design",2],["Road & Pavement",3],["Hydraulics",4]]},
+     {lbl:"Digital",col:"var(--teal)",skills:[["AutoCAD / Civil 3D",3],["GIS & Geospatial",2]]},
+     {lbl:"Site & Field",col:"var(--lime)",skills:[["Surveying & Setting Out",3],["Construction Supervision",2],["QA / QC",2]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Report Writing",3],["Design Coordination",2]]},
+   ]},
+  {name:"Farhan Hossain",init:"FH",role:"BIM Manager",exp:"6 yrs · Permanent",col:"var(--vio)",pct:80,status:"part",proj:"Greenfield Ph.1 + Riverside Dev",
+   cats:[
+     {lbl:"Digital & BIM",col:"var(--teal)",skills:[["BIM / Revit",4],["Clash Detection",4],["AutoCAD / Civil 3D",3],["GIS & Geospatial",2]]},
+     {lbl:"Civil",col:"var(--blu)",skills:[["Structural Analysis",2]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Design Coordination",4],["Report Writing",3],["Project Management",3]]},
+   ]},
+  {name:"Sayeed Zaman",init:"SZ",role:"BIM Technician",exp:"3 yrs · Contract",col:"var(--vio)",pct:50,status:"free",proj:"Greenfield Ph.1",
+   cats:[
+     {lbl:"Digital & BIM",col:"var(--teal)",skills:[["BIM / Revit",3],["Clash Detection",3],["AutoCAD / Civil 3D",3]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Report Writing",2],["Design Coordination",2]]},
+   ]},
+  {name:"Mariam Rahman",init:"MR",role:"MEP Coordinator",exp:"5 yrs · Permanent",col:"var(--amb)",pct:90,status:"busy",proj:"Riverside Dev + WTP Expansion",
+   cats:[
+     {lbl:"MEP Services",col:"var(--vio)",skills:[["Mechanical / HVAC",3],["Electrical LV/MV",2],["Plumbing & Sanitation",3],["Fire Fighting",2]]},
+     {lbl:"Digital",col:"var(--teal)",skills:[["AutoCAD / Civil 3D",3],["BIM / Revit",2]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Design Coordination",3],["Report Writing",2]]},
+   ]},
+  {name:"Tanvira Islam",init:"TI",role:"Senior QS",exp:"7 yrs · Permanent",col:"var(--lime)",pct:70,status:"part",proj:"Greenfield Ph.1 + Highway Upgrade",
+   cats:[
+     {lbl:"Project Controls",col:"var(--amb)",skills:[["Cost & BOQ",4],["Contract Admin",3],["Programme",3],["Risk Management",3]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Report Writing",4],["Stakeholder Mgmt",3],["Project Management",3]]},
+   ]},
+  {name:"Adnan Reza",init:"AR",role:"Planning Engineer",exp:"4 yrs · Permanent",col:"var(--lime)",pct:65,status:"part",proj:"Greenfield Ph.1 + Riverside Dev",
+   cats:[
+     {lbl:"Project Controls",col:"var(--amb)",skills:[["Programme (MSP/P6)",4],["Cost & BOQ",3],["Risk Management",3],["Contract Admin",2]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Report Writing",3],["Stakeholder Mgmt",2],["Project Management",3]]},
+   ]},
+  {name:"Kamrul Miah",init:"KM",role:"HSE Officer",exp:"9 yrs · Permanent",col:"var(--lime)",pct:55,status:"free",proj:"Greenfield Ph.1 + WTP Expansion",
+   cats:[
+     {lbl:"Site & Field",col:"var(--lime)",skills:[["HSE Management",4],["Construction Supervision",3],["QA / QC",3]]},
+     {lbl:"Environmental",col:"var(--mag)",skills:[["Environmental / EIA",2]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Report Writing",3],["Stakeholder Mgmt",3]]},
+   ]},
+  {name:"Layla Ahmed",init:"LA",role:"Environmental Specialist",exp:"4 yrs · Permanent",col:"var(--coral)",pct:40,status:"free",proj:"Greenfield Ph.1",
+   cats:[
+     {lbl:"Environmental",col:"var(--mag)",skills:[["Environmental / EIA",3],["Report Writing",3]]},
+     {lbl:"Site & Field",col:"var(--lime)",skills:[["Construction Supervision",2],["QA / QC",2]]},
+     {lbl:"Soft Skills",col:"var(--vio)",skills:[["Stakeholder Mgmt",3],["Design Coordination",2]]},
+   ]},
+];
+
+// Dept cards
+document.getElementById("dept-grid").innerHTML=DEPTS.map(d=>`
+  <div class="dcard">
+    <div class="di">${d.icon}</div>
+    <div class="dn" style="color:${d.col}">${d.name}</div>
+    <div class="ds">${d.desc}</div>
+    <div class="dc" style="color:${d.col}">${d.count}</div>
+  </div>`).join("");
+
+// Skill profiles
+function renderProfile(idx){
+  const m=MEMBERS[idx];
+  document.getElementById("pd-av").style.background=m.col;
+  document.getElementById("pd-av").textContent=m.init;
+  document.getElementById("pd-name").textContent=m.name;
+  document.getElementById("pd-role").textContent=m.role;
+  document.getElementById("pd-exp").textContent=m.exp;
+  document.getElementById("pd-skills").innerHTML=m.cats.map(cat=>`
+    <div class="cat-label">${cat.lbl}</div>
+    ${cat.skills.map(([lbl,val])=>`
+      <div class="sb-row">
+        <span class="sb-lbl">${lbl}</span>
+        <div class="sb-track"><div class="sb-fill" style="width:${(val/4)*100}%;background:${cat.col}"></div></div>
+        <span class="sb-val">${val}</span>
+      </div>`).join("")}`).join("");
+}
+
+document.getElementById("mtabs").innerHTML=MEMBERS.map((m,i)=>`
+  <div class="mtab${i===0?" active":""}" data-i="${i}">
+    <div class="mic" style="background:${m.col}">${m.init}</div>
+    <div><div style="font-weight:600">${m.name.split(" ")[0]} ${m.name.split(" ")[1]}</div>
+    <div style="font-size:10.5px;color:var(--mut);font-weight:400;margin-top:1px">${m.role}</div></div>
+  </div>`).join("");
+
+document.getElementById("mtabs").addEventListener("click",e=>{
+  const t=e.target.closest(".mtab"); if(!t) return;
+  document.querySelectorAll(".mtab").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  renderProfile(+t.dataset.i);
+});
+renderProfile(0);
+
+// Availability
+document.getElementById("avail-grid").innerHTML=MEMBERS.map(m=>{
+  const free=100-m.pct;
+  const cls=m.status==="free"?"bs-free":m.status==="part"?"bs-part":"bs-busy";
+  const lbl=m.status==="free"?"Available":m.status==="part"?"Partly available":"Fully booked";
+  return`<div class="av-card">
+    <div class="av-top">
+      <div class="av-ic" style="background:${m.col}">${m.init}</div>
+      <div><div class="av-name">${m.name}</div><div class="av-role">${m.role}</div></div>
+    </div>
+    <div class="av-pct" style="color:${m.col}">${free}%</div>
+    <div class="av-pct-l">capacity remaining</div>
+    <div class="av-track"><div class="av-fill" style="width:${free}%;background:${m.col}"></div></div>
+    <div class="av-proj">${m.proj}</div>
+    <span class="av-badge ${cls}">${lbl}</span>
+  </div>`;}).join("");
+</script>
+</body>
+</html>
